@@ -1,4 +1,4 @@
-# Breath-First Search
+# Breadth-First Search
 
 # Recorrer el arbol por nivel
 
@@ -11,7 +11,10 @@
 
 # Recordemos que la cola es una estructura de dato donde FIFO, first in, first out.
 
-def tree_by_levels(node):
+# Si quisiera hacer el deepthfirst search de forma iterativa, debería usar una pila,
+# cosa de meter el hijo izquierdo de cada nodo en la pila primero y hacer un pop.
+
+def breadthfirst_search(node):
     queue = []
     result = []
 
@@ -26,3 +29,24 @@ def tree_by_levels(node):
         next.right and queue.append(next.right)
     
     return result   
+
+def deepthfirst_search_recursive(node):
+    if node:
+        print(node.value)
+        deepthfirst_search(node.left)
+        deepthfirst_search(node.right)
+    return
+
+def deepthfirst_search_iterative(node):
+    result = []
+    stack = []
+    
+    stack.append(node)
+    while node and len(stack) > 0:
+        node = stack.pop()
+        result.append(node.value)
+        node.right and stack.append(node.right)
+        node.left and stack.append(node.left)
+        
+    
+    return result
