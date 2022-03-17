@@ -15,30 +15,27 @@
 # cosa de meter el hijo izquierdo de cada nodo en la pila primero y hacer un pop.
 
 
-
 # Sea graph =
-my_graph = {
-    "a": ["b", "d"],
-    "b": ["c"],
-    "c": [],
-    "d": ["b", "f"],
-    "e": ["d"],
-    "f": []
-}
+my_graph = {"a": ["b", "d"], "b": ["c"], "c": [], "d": ["b", "f"], "e": ["d"], "f": []}
+
 
 def breadthfirst_search(graph, node):
     queue = []
     result = []
 
-    if not node: return []
+    if not node:
+        return []
     queue.append(node)
     while len(queue) > 0:
         # sacar de la cola
         next = queue.pop(0)
-        result.append(next.value)
+        result.append(next)
         # agrego a la cola a los adyacentes, siempre y cuando tenga vecinos.
-        if node in graph.keys():
-            for adj in graph[node]:
+        if next in graph.keys():
+            for adj in graph[next]:
                 queue.append(adj)
-    
-    return result   
+    return result
+
+
+res = breadthfirst_search(my_graph, "a")
+print(res)  # todo el recorrido realizado por el algoritmo
