@@ -52,12 +52,12 @@ def deepthfirst_search_iterative(node):
     return result
 
 # Sea graph =
-graph = {
+my_graph = {
     "a": ["b", "d"],
     "b": ["c"],
     "c": [],
     "d": ["b", "f"],
-    "e": ["d"]
+    "e": ["d"],
     "f": []
 }
 
@@ -67,7 +67,7 @@ def has_path_depthfirst(graph, source, destiny):
     if not source: return False
     
     for adj in graph[source]:
-        if has_path(graph, adj, destiny): return True # burbujeo el retorno
+        if has_path_depthfirst(graph, adj, destiny): return True # burbujeo el retorno
     
     # Si yo no soy el destino, y ninguno de mis hijos tampoco, retorno False
     return False
