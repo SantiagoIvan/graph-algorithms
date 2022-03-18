@@ -31,14 +31,6 @@ def connected_components_count():
     array_of_groups = []
 
     for node in my_graph.keys():
-        # puedo aplicar depth o breadth es lo mismo, para cada uno, y asi recorrer el grafo
-        # cuando completo un recorrido, marco todos los nodos por los cuales pase como visitados
-        # y como estoy recorriendo todos los adyacentes de cada nodo ( y es grafo no dirigido)
-        # yo se que para esos otros nodos, voy a obtener el mismo grupo de elementos
-        # Por esa razon, el vector de visitados lo tengo aca arriba y no en cada iteracion del depthfirst.
-        # Uso el mismo vector para todas las iteraciones
-        # Cuando paso a la siguiente iteracion, pregunto si ese nodo ya lo visite anteriormente,
-        # si es asi, ya se que recorri todos sus vecinos, y no hara falta aplicar la busqueda desde ese nodo
         if not node in visited:
             aux = depthfirst(my_graph, node, visited, set([]))
             array_of_groups.append(aux)
@@ -46,5 +38,14 @@ def connected_components_count():
 
     return (count, array_of_groups)
 
+
+# puedo aplicar depth o breadth es lo mismo, para cada uno, y asi recorrer el grafo
+# cuando completo un recorrido, marco todos los nodos por los cuales pase como visitados
+# y como estoy recorriendo todos los adyacentes de cada nodo ( y es grafo no dirigido)
+# yo se que para esos otros nodos, voy a obtener el mismo grupo de elementos
+# Por esa razon, el vector de visitados lo tengo aca arriba y no en cada iteracion del depthfirst.
+# Uso el mismo vector para todas las iteraciones
+# Cuando paso a la siguiente iteracion, pregunto si ese nodo ya lo visite anteriormente,
+# si es asi, ya se que recorri todos sus vecinos, y no hara falta aplicar la busqueda desde ese nodo
 
 print(connected_components_count())
