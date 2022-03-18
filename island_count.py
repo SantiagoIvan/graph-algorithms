@@ -1,0 +1,108 @@
+# ---- ENUNCIADO ----
+# Tengo un mapa 2D.
+# En los casilleros con una L ( land ) es posible pararse
+# Los casilleros con una W ( water ) no es posible pararse, no deben ser tenidos en cuenta
+# La idea de este ejercicio es contar islas, mostrar sus casilleros y decir cual es la isla mas grande.
+# -------------------
+
+# Este mapa en 2D es un grafo no dirigido, por lo que podria armarme una matriz de adyacencia
+# a partir del mapa
+# Deberia pararme en todos los nodos, contar los componentes y los que ya visite, no visitarlos de nuevo
+# Reutilizando el codigo de connected components podria resolver este ejercicio
+# Deberia recorrer la grilla, y si encuentro una tierra, aplicar una busqueda desde ese nodo para encontrar
+# todos los casilleros de la isla
+# Podria armar la matriz de adyacencia, pero es medio al pedo, ya la matriz que me dan es un mapita
+# y no voy a recorrer todo el mapa solo para armar esa matriz y luego recorrer la matriz.
+# Puedo directamente recorrer el mapa y hallarlos adyacentes de 1, total es moverme a la derecha/izquierda/arriba/abajo
+
+my_map_2d = [
+    ["W", "L", "W", "W", "L", "W"],
+    ["L", "L", "W", "W", "L", "W"],
+    ["W", "L", "W", "W", "W", "W"],
+    ["W", "W", "W", "L", "L", "W"],
+    ["W", "L", "W", "L", "L", "W"],
+    ["W", "W", "W", "W", "W", "W"],
+]
+
+
+def breadthfirst(my_map, start, visited):
+    queue = []
+    local_visits = set([])
+    # para mantener el control de lo que visite en esta iteracion, y retornarlo, ya que contendria
+    # a los elementos de esta isla
+
+    queue.append(start)
+
+    while len(queue) > 0:
+        (row, col) = queue.pop(0)
+
+        local_visits.add((row, col))
+
+        # ahora visito a los adyacentes siguiendo la regla NOSE - norte - oeste - sur - este
+        # norte - arriba
+        if (
+            not (row - 1 < 0)
+            and my_map[row - 1][col] == "L"
+            and (row - 1, col) not in local_visits
+        ):
+            local_visits.add((row - 1, col))
+            visited.add((row - 1, col))
+            queue.append((row - 1, col))
+        # oeste - izquierda
+        if (
+            not (col - 1 < 0)
+            and my_map[row][col - 1] == "L"
+            and (row, col - 1) not in local_visits
+        ):
+            local_visits.add((row, col - 1))
+            visited.add((row, col - 1))
+            queue.append((row, col - 1))
+        # sur - abajo
+        if (
+            not (row + 1 > len(my_map))
+            and my_map[row + 1][col] == "L"
+            and (row + 1, col) not in local_visits
+        ):
+            local_visits.add((row + 1, col))
+            visited.add((row + 1, col))
+            queue.append((row + 1, col))
+        # este - derecha
+        if (
+            not (col + 1 > len(my_map[row]))
+            and my_map[row][col + 1] == "L"
+            and (row, col + 1) not in local_visits
+        ):
+            local_visits.add((row, col + 1))
+            visited.add((row, col + 1))
+            queue.append((row, col + 1))
+    return local_visits
+
+
+# retorna la cantidad de islas, y su composicion
+def count_islands(my_map):
+    count = 0
+    visited = set([])
+    # set de pares ordenados, representando las coordenadas de las tierras visitadas
+    # las W las tendria que ignorar de todo analisis, ni las deberia visitar
+    islands = []
+
+    for row in range(len(my_map)):
+        for column in range(len(my_map[row])):
+            if my_map[row][column] == "W":
+                continue  # ignoro el agua
+            # si es L, aplico una busqueda, cualquiera, es lo mismo, depth o breadth
+            if (row, column) not in visited:
+                island = breadthfirst(my_map, (row, column), visited)
+                islands.append(island)
+                count += 1
+    return (count, islands)
+
+
+def longest_island(islands):
+    return max(islands, key=len)
+
+
+(q, islands) = count_islands(my_map_2d)
+print("Cantidad de islas: ", q)
+print("Casilleros de cada isla: ", islands)
+print("Isla mas larga: ", longest_island(islands))
