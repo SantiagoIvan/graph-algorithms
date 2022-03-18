@@ -37,48 +37,29 @@ def breadthfirst(my_map, start, visited):
     while len(queue) > 0:
         (row, col) = queue.pop(0)
 
-        local_visits.add((row, col))
+        # Restricciones
+        if (row, col) in local_visits:
+            continue
 
-        # ahora visito a los adyacentes siguiendo la regla NOSE - norte - oeste - sur - este
-        # norte - arriba
-        if (
-            not (row - 1 < 0)
-            and my_map[row - 1][col] == "L"
-            and (row - 1, col) not in local_visits
-        ):
-            local_visits.add((row - 1, col))
-            visited.add((row - 1, col))
-            queue.append((row - 1, col))
-        # oeste - izquierda
-        if (
-            not (col - 1 < 0)
-            and my_map[row][col - 1] == "L"
-            and (row, col - 1) not in local_visits
-        ):
-            local_visits.add((row, col - 1))
-            visited.add((row, col - 1))
-            queue.append((row, col - 1))
-        # sur - abajo
-        if (
-            not (row + 1 > len(my_map))
-            and my_map[row + 1][col] == "L"
-            and (row + 1, col) not in local_visits
-        ):
-            local_visits.add((row + 1, col))
-            visited.add((row + 1, col))
-            queue.append((row + 1, col))
-        # este - derecha
-        if (
-            not (col + 1 > len(my_map[row]))
-            and my_map[row][col + 1] == "L"
-            and (row, col + 1) not in local_visits
-        ):
-            local_visits.add((row, col + 1))
-            visited.add((row, col + 1))
-            queue.append((row, col + 1))
+        rowIsCorrect = 0 <= row and row < len(my_map)
+        colIsCorrect = 0 <= col and col < len(my_map[row])
+        if (not rowIsCorrect) or (not colIsCorrect) or (my_map[row][col] == "W"):
+            continue
+
+        local_visits.add((row, col))
+        visited.add((row, col))
+
+        # Agrego los adyacentes, total con el caso base de arriba, si son invalidos quedan descartados del analisis
+        queue.append((row - 1, col))
+        queue.append((row, col - 1))
+        queue.append((row + 1, col))
+        queue.append((row, col + 1))
+
     return local_visits
 
 
+# queda mas prolijo de esta forma recursiva, ya que con 1 condicional, que seria mi caso base,
+# retorno directamente si es una posicion invalida
 def depthfirst(my_map, start, visited, local_visits):
     if start in local_visits:
         return
@@ -115,8 +96,8 @@ def count_islands(my_map):
                 continue  # ignoro el agua
             # si es L, aplico una busqueda, cualquiera, es lo mismo, depth o breadth
             if (row, column) not in visited:
-                # island = breadthfirst(my_map, (row, column), visited)
-                island = depthfirst(my_map, (row, column), visited, set([]))
+                island = breadthfirst(my_map, (row, column), visited)
+                # island = depthfirst(my_map, (row, column), visited, set([]))
                 islands.append(island)
                 count += 1
     return (count, islands)
