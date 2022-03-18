@@ -7,20 +7,22 @@ edges = [["i", "j"], ["k", "i"], ["k", "j"], ["m", "k"], ["k", "l"], ["o", "n"]]
 # todas las aristas una vez como maximo.
 
 # Space complexity = O ( n )
+def build_graph_from_incidence_matrix(matrix):
+    my_graph = {}
+    for pair in matrix:
+        if pair[0] not in my_graph.keys():
+            my_graph[pair[0]] = set([pair[1]])
+        else:
+            my_graph[pair[0]].add(pair[1])
+        if pair[1] not in my_graph.keys():
+            my_graph[pair[1]] = set([pair[0]])
+        else:
+            my_graph[pair[1]].add(pair[0])
 
-my_graph = {}
+    return my_graph
 
-for pair in edges:
-    if pair[0] not in my_graph.keys():
-        my_graph[pair[0]] = set([pair[1]])
-    else:
-        my_graph[pair[0]].add(pair[1])
-    if pair[1] not in my_graph.keys():
-        my_graph[pair[1]] = set([pair[0]])
-    else:
-        my_graph[pair[1]].add(pair[0])
 
-print(my_graph)
+my_graph = build_graph_from_incidence_matrix(edges)
 
 # Como hallar un camino entre nodos en un grafo ciclico?
 # marcando los nodos que voy visitando como visitados
@@ -39,6 +41,3 @@ def has_undirected_path(graph, src, dst, visited=[]):
         if has_undirected_path(graph, adj, dst):
             return True
     return False
-
-
-print(has_undirected_path(my_graph, "n", "o"))
