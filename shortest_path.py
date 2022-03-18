@@ -1,5 +1,4 @@
 from undirected_path import build_graph_from_incidence_matrix
-import time
 
 edges = [["w", "x"], ["x", "y"], ["z", "y"], ["z", "v"], ["w", "v"]]
 
