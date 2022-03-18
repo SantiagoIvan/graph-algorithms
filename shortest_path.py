@@ -1,4 +1,5 @@
 from undirected_path import build_graph_from_incidence_matrix
+import time
 
 edges = [["w", "x"], ["x", "y"], ["z", "y"], ["z", "v"], ["w", "v"]]
 
@@ -13,23 +14,48 @@ my_graph = build_graph_from_incidence_matrix(edges)
 # en este caso ni estoy teniendo en cuenta el peso
 
 
-def shortest_path(graph, start, end):
-    visited = set([start])
-    queue = []  # par ordenado, (x, distance), siendo x el nodo actual
+def build_path(vector, init):
+    (current, distance, prev) = init
+    path = [current]
+    while prev:
+        path.append(prev)
+        for elem in vector:
+            if elem[0] == prev:
+                prev = elem[2]
+                break
+    path.reverse()
+    return path
 
-    queue.append((start, 0))
+
+def node_visited(node, visited):
+    for elem in visited:
+        if elem[0] == node:
+            return True
+    return False
+
+
+def shortest_path(graph, start, end):
+    visited = set([(start, 0, None)])
+    # de esta forma, el que tiene None, es el comienzo, y cuando encuentro
+    # el nodo destino, puedo recorrer este vector armando el path con el tercer elemento, ya que se quienes
+    # son los ancestros de un nodo en un camino
+
+    queue = []
+    # trio ordenado, (x, distance, prev), siendo x el nodo actual y prev, el precesor
+
+    queue.append((start, 0, None))  # None porque nadie es el padre de este
 
     while len(queue) > 0:
-        (next, distance) = queue.pop(0)
+        (current, distance, prev) = queue.pop(0)
 
-        if next == end:
-            return distance
-        for adj in graph[next]:
-            if adj not in visited:
-                visited.add(adj)
-                queue.append((adj, distance + 1))
+        if current == end:
+            path = build_path(visited, (current, distance, prev))
+            return (distance, path)
+        for adj in graph[current]:
+            if not node_visited(adj, visited):
+                visited.add((adj, distance + 1, current))
+                queue.append((adj, distance + 1, current))
     print("Those nodes are not connected")
-    return -1
 
 
-print(shortest_path(my_graph, "w", "z"))
+print(shortest_path(my_graph, "w", "v"))
