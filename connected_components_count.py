@@ -25,18 +25,23 @@ def depthfirst(graph, node, visited, result):
     return result
 
 
-def connected_components_count():
+def connected_components_count(graph):
     count = 0
     visited = set([])
     array_of_groups = []
 
-    for node in my_graph.keys():
+    for node in graph.keys():
         if not node in visited:
-            aux = depthfirst(my_graph, node, visited, set([]))
+            aux = depthfirst(graph, node, visited, set([]))
             array_of_groups.append(aux)
             count += 1
 
     return (count, array_of_groups)
+
+
+def largest_component_in_graph(graph):
+    (_, components) = connected_components_count(graph)
+    return max(components, key=len)
 
 
 # puedo aplicar depth o breadth es lo mismo, para cada uno, y asi recorrer el grafo
@@ -48,4 +53,5 @@ def connected_components_count():
 # Cuando paso a la siguiente iteracion, pregunto si ese nodo ya lo visite anteriormente,
 # si es asi, ya se que recorri todos sus vecinos, y no hara falta aplicar la busqueda desde ese nodo
 
-print(connected_components_count())
+print(connected_components_count(my_graph))
+print("Largest component is ", largest_component_in_graph(my_graph))
