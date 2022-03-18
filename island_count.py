@@ -15,6 +15,7 @@
 # y no voy a recorrer todo el mapa solo para armar esa matriz y luego recorrer la matriz.
 # Puedo directamente recorrer el mapa y hallarlos adyacentes de 1, total es moverme a la derecha/izquierda/arriba/abajo
 
+
 my_map_2d = [
     ["W", "L", "W", "W", "L", "W"],
     ["L", "L", "W", "W", "L", "W"],
@@ -78,6 +79,28 @@ def breadthfirst(my_map, start, visited):
     return local_visits
 
 
+def depthfirst(my_map, start, visited, local_visits):
+    if start in local_visits:
+        return
+    (row, column) = start
+    rowIsCorrect = 0 <= row and row < len(my_map)
+    colIsCorrect = 0 <= column and column < len(my_map[row])
+
+    if (not rowIsCorrect) or (not colIsCorrect) or (my_map[row][column] == "W"):
+        return
+
+    local_visits.add((row, column))
+    visited.add((row, column))
+
+    # visito a los adyacentes
+    depthfirst(my_map, (row - 1, column), visited, local_visits)
+    depthfirst(my_map, (row, column - 1), visited, local_visits)
+    depthfirst(my_map, (row + 1, column), visited, local_visits)
+    depthfirst(my_map, (row, column + 1), visited, local_visits)
+
+    return local_visits
+
+
 # retorna la cantidad de islas, y su composicion
 def count_islands(my_map):
     count = 0
@@ -92,7 +115,8 @@ def count_islands(my_map):
                 continue  # ignoro el agua
             # si es L, aplico una busqueda, cualquiera, es lo mismo, depth o breadth
             if (row, column) not in visited:
-                island = breadthfirst(my_map, (row, column), visited)
+                # island = breadthfirst(my_map, (row, column), visited)
+                island = depthfirst(my_map, (row, column), visited, set([]))
                 islands.append(island)
                 count += 1
     return (count, islands)
