@@ -6,6 +6,18 @@ Busqueda a lo ancho en un arbol. Busqueda por nivel, resuelto tanto de forma rec
 
 Busqueda en una direccion hasta que no hay mas elementos, luego se cambia de direccion.
 
+# Tree sum
+
+Realiza la suma de los elementos de un arbol binario, por los 2 metodos.
+
+# Tree Min value
+
+Realiza la busqueda del valor minimo de un arbol binario, por los 2 metodos
+
+# Max root-to-leaf path
+
+Busca cual es la profundidad del arbol
+
 # HasPath
 
 Funcion que dado un grafo dirigido, y 2 nodos (origen y destino) se fija si existe camino entre ambos.
