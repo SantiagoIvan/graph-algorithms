@@ -33,3 +33,5 @@ def has_path_breadthfirst( graph, source, destiny):
         for adj in graph[next]:
             queue.append(adj)
         # analizo en las siguientes iteraciones al siguiente nivel
+    # si ni el origen, ni alguno de sus descendientes es el destino, entonces retorno False, ya que no hay camino
+    return False
